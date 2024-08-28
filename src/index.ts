@@ -1,4 +1,4 @@
-function SELECT(X, L, R, K) {
+function SELECT(X: number[], L: number, R: number, K: number): void {
   while (R > L) {
     if (R - L > 600) {
       const N = R - L + 1;
@@ -37,13 +37,13 @@ function SELECT(X, L, R, K) {
   }
 }
 
-function swap(arr, i, j) {
+function swap(arr: number[], i: number, j: number): void {
   const temp = arr[i];
   arr[i] = arr[j];
   arr[j] = temp;
 }
 
-export default function findMedian(arr) {
+export default function findMedian(arr: number[]): number {
   const n = arr.length;
   const k = Math.floor(n / 2);
   SELECT(arr, 0, n - 1, k);

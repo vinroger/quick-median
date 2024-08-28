@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Median Algorithm Benchmark Results</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .main-title {
+            text-align: center;
+            font-size: 36px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .creator {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 300;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .chart-container {
+            width: 800px;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .chart-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #444;
+            margin-bottom: 20px;
+        }
+        .dataset-explanation {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+        .acknowledgement {
+            font-size: 12px;
+            color: #888;
+            margin-top: 50px;
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="main-title">Median Algorithm Benchmark Results</h1>
+    <p class="creator">By Vincentius Roger Kuswara</p>
+    <div id="overallStats" class="chart-container">
+        <h2 class="chart-title">Overall Statistics</h2>
+        <canvas id="overallChart"></canvas>
+        <div id="overallTable"></div>
+    </div>
+    <div id="chartContainer"></div>
+    <div class="acknowledgement">
+        <h3>Acknowledgement</h3>
+        <p>347 (2005) 214 – 238 www.elsevier.com/locate/tcs On Floyd and Rivest's SELECT algorithm Krzysztof C. Kiwiel∗ Systems Research Institute, Newelska 6, 01-447 Warsaw, Poland Received 23 December 2003; received in revised form 1 August 2004; accepted 17 June 2005 Communicated by W. Szpankowski</p>
+    </div>
+    <script>
+        async function fetchData() {
+            const response = await fetch('benchmark_results.json');
+            return await response.json();
+        }
+
+        function generateRandomColor() {
+            return `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`;
+        }
+
+        const datasetExplanations = {
+            Random: "A random permutation of the integers 1 through n.",
+            Onezero: "A random permutation of n/2 ones and n/2 zeros.",
+            Sorted: "The integers 1 through n in increasing order.",
+            Rotated: "A sorted sequence rotated left once; i.e., (2, 3, . . . , n, 1).",
+            Organpipe: "The integers (1, 2, . . . , n/2, n/2,..., 2, 1).",
+            M3killer: "Musser's \"median-of-3 killer\" sequence with n = 4j and k = n/2: 1234 ... k − 2 k − 1 k k + 1 ... 2k − 2 2k − 1 2k 1 k + 1 3 k + 3 ... 2k − 3 k − 12 4 ... 2k − 2 2k − 1 2k .",
+            Twofaced: "Obtained by randomly permuting the elements of an m3killer sequence in positions 4log2 n through n/2 − 1 and n/2 + 4log2 n − 1 through n − 2."
+        };
+
+        async function createCharts() {
+            const data = await fetchData();
+            const specialCases = [...new Set(data['quick-median'].map(r => r.specialCase))].filter(sc => sc !== 'Onezero');
+            const algorithms = Object.keys(data);
+        
+            // Calculate overall statistics
+            const overallStats = algorithms.map(alg => {
+                const allResults = data[alg]
+                    .filter(r => r.specialCase !== 'Onezero')
+                    .reduce((acc, curr) => {
+                        if (!acc[curr.size]) acc[curr.size] = [];
+                        acc[curr.size].push(curr.time);
+                        return acc;
+                    }, {});
+        
+                return {
+                    name: alg,
+                    data: Object.entries(allResults).map(([size, times]) => ({
+                        x: parseInt(size),
+                        y: times.reduce((a, b) => a + b, 0) / times.length
+                    }))
+                };
+            });
+        
+            // Create overall chart
+            const ctx = document.getElementById('overallChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: overallStats.map(stat => ({
+                        label: stat.name,
+                        data: stat.data,
+                        borderColor: stat.name === 'quick-median' ? 'red' : generateRandomColor(),
+                        borderWidth: stat.name === 'quick-median' ? 4 : 1,
+                        fill: false
+                    }))
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            type: 'logarithmic',
+                            title: { display: true, text: 'Input Size', font: { weight: 'bold' } }
+                        },
+                        y: {
+                            type: 'logarithmic',
+                            title: { display: true, text: 'Average Time (ms)', font: { weight: 'bold' } }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            onClick: (e, legendItem, legend) => {
+                                const index = legendItem.datasetIndex;
+                                const ci = legend.chart;
+                                if (legendItem.text === 'quick-median') return;
+                                if (ci.isDatasetVisible(index)) {
+                                    ci.hide(index);
+                                    legendItem.hidden = true;
+                                } else {
+                                    ci.show(index);
+                                    legendItem.hidden = false;
+                                }
+                                ci.update();
+                            }
+                        }
+                    }
+                }
+            });
+        
+            // Create overall table
+            const tableDiv = document.getElementById('overallTable');
+            const table = document.createElement('table');
+            table.style.width = '100%';
+            table.style.borderCollapse = 'collapse';
+            table.style.marginTop = '20px';
+        
+            // Create header row
+            const headerRow = table.insertRow();
+            ['Algorithm', ...new Set(overallStats[0].data.map(d => d.x))].forEach(text => {
+                const th = document.createElement('th');
+                th.textContent = text;
+                th.style.border = '1px solid black';
+                th.style.padding = '5px';
+                headerRow.appendChild(th);
+            });
+        
+            // Create data rows
+            overallStats.forEach(stat => {
+                const row = table.insertRow();
+                const nameCell = row.insertCell();
+                nameCell.textContent = stat.name;
+                nameCell.style.border = '1px solid black';
+                nameCell.style.padding = '5px';
+
+                if (stat.name === 'quick-median') {
+                    row.style.backgroundColor = '#ffeeee';  // Light red background
+                    row.style.fontWeight = 'bold';
+                }
+        
+                stat.data.forEach(d => {
+                    const cell = row.insertCell();
+                    cell.textContent = d.y.toFixed(2);
+                    cell.style.border = '1px solid black';
+                    cell.style.padding = '5px';
+                });
+            });
+        
+            tableDiv.appendChild(table);
+
+            specialCases.forEach(specialCase => {
+                const chartDiv = document.createElement('div');
+                chartDiv.className = 'chart-container';
+
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'chart-title';
+                titleDiv.textContent = `${specialCase} Dataset`;
+                chartDiv.appendChild(titleDiv);
+
+                const explanationDiv = document.createElement('div');
+                explanationDiv.className = 'dataset-explanation';
+                explanationDiv.textContent = datasetExplanations[specialCase] || "No explanation available.";
+                chartDiv.appendChild(explanationDiv);
+
+                const canvas = document.createElement('canvas');
+                canvas.id = `benchmarkChart_${specialCase}`;
+                canvas.width = 800;
+                canvas.height = 400;
+                chartDiv.appendChild(canvas);
+
+                chartContainer.appendChild(chartDiv);
+
+                const ctx = canvas.getContext('2d');
+                
+                const datasets = Object.entries(data).map(([name, results]) => {
+                    const filteredResults = results.filter(r => r.specialCase === specialCase);
+                    return {
+                        label: name,
+                        data: filteredResults.map(r => ({ x: r.size, y: r.time })),
+                        borderColor: name === 'quick-median' ? 'red' : generateRandomColor(),
+                        borderWidth: name === 'quick-median' ? 3 : 1,
+                        fill: false
+                    };
+                });
+
+                const quickMedianData = datasets.find(d => d.label === 'quick-median').data;
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: { datasets },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                type: 'logarithmic',
+                                title: {
+                                    display: true,
+                                    text: 'Input Size',
+                                    font: {
+                                        weight: 'bold'
+                                    }
+                                }
+                            },
+                            y: {
+                                type: 'logarithmic',
+                                title: {
+                                    display: true,
+                                    text: 'Time (ms)',
+                                    font: {
+                                        weight: 'bold'
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                onClick: (e, legendItem, legend) => {
+                                    const index = legendItem.datasetIndex;
+                                    const ci = legend.chart;
+                                    if (legendItem.text === 'quick-median') return; // Prevent toggling quick-median
+                                    if (ci.isDatasetVisible(index)) {
+                                        ci.hide(index);
+                                        legendItem.hidden = true;
+                                    } else {
+                                        ci.show(index);
+                                        legendItem.hidden = false;
+                                    }
+                                    ci.update();
+                                }
+                            }
+                        },
+                        annotation: {
+                            annotations: [{
+                                type: 'label',
+                                xValue: 1000000,
+                                yValue: quickMedianData.find(d => d.x === 1000000)?.y,
+                                content: 'quick-median (fastest)',
+                                backgroundColor: 'rgba(255, 0, 0, 0.3)',
+                                borderColor: 'red',
+                                borderWidth: 1,
+                                borderRadius: 4,
+                                padding: 4
+                            }]
+                        }
+                    }
+                });
+            });
+        }
+
+        createCharts();
+    </script>
+</body>
+</html>

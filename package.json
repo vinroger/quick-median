@@ -2,11 +2,31 @@
   "name": "quick-median",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha",
+    "benchmark": "node benchmark/benchmark.js",
+    "minify": "terser dist/index.js -o dist/index.min.js",
+    "build": "tsc",
+    "prepublishOnly": "npm run build && npm run minify"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "benchmark": "^2.1.4",
+    "chai": "^5.1.1",
+    "compute-median": "^2.0.0",
+    "fast-median": "^1.1.0",
+    "median": "^0.0.2",
+    "median-average": "^1.0.1",
+    "median-quickselect": "^1.0.1",
+    "ml-array-median": "^1.1.6",
+    "mocha": "^10.7.3",
+    "stats-median": "^1.0.1",
+    "faster-median": "^1.0.0"
+  },
+  "dependencies": {}
 }
