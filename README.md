@@ -1,4 +1,4 @@
-# Quick-Median: Lightning-Fast Median Finding with O(n) Average Time Complexity
+# Quick-Median: 🚀 Lightning-Fast Median Finding with O(n) Average Time Complexity
 
 🚀 Blazingly fast median computation using the Floyd-Rivest algorithm
 📊 Outperforms traditional quickselect in practice
