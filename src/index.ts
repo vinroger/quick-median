@@ -43,7 +43,7 @@ function swap(arr: number[], i: number, j: number): void {
   arr[j] = temp;
 }
 
-export default function findMedian(arr: number[]): number {
+export function findMedian(arr: number[]): number {
   const n = arr.length;
   const k = Math.floor(n / 2);
   SELECT(arr, 0, n - 1, k);
@@ -55,3 +55,5 @@ export default function findMedian(arr: number[]): number {
     return arr[k];
   }
 }
+
+export default findMedian;

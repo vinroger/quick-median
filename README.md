@@ -14,6 +14,25 @@ Install quick-median with npm:
 npm install quick-median
 ```
 
+### CommonJS
+```javascript
+const { findMedian } = require('quick-median');
+
+const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const median = findMedian(arr);
+console.log(median); // 5.5
+```
+
+### ES Module (TypeScript Supported)
+```javascript
+import findMedian from 'quick-median';
+
+const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const median = findMedian(arr);
+console.log(median); // 5.5
+
+```
+
 ## Why this project?
 
 Many existing median-finding packages on npm are not optimized for performance. This project implements the Floyd-Rivest algorithm, a highly efficient selection algorithm that outperforms traditional quickselect in practice.

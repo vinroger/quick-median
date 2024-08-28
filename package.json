@@ -1,25 +1,29 @@
 {
   "name": "quick-median",
-  "version": "1.0.4",
+  "version": "1.0.7",
   "description": "Lightning-fast median finding with O(n) average time complexity using Floyd-Rivest algorithm",
-  "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "module": "./dist/esm/index.js",
+  "main": "./dist/cjs/index.js",
+  "types": "./dist/types/index.d.ts",
+  "module": "./dist/esm/index.mjs",
   "exports": {
     ".": {
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.mjs"
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "mocha",
     "benchmark": "node benchmark/benchmark.js",
     "minify": "terser dist/index.js -o dist/index.min.js",
-    "build": "npm run build:esm && npm run build:cjs",
-    "build:esm": "tsc",
     "build:cjs": "tsc -p tsconfig.cjs.json",
-    "prepublishOnly": "npm run build && npm run minify"
+    "build:esm": "tsc -p tsconfig.esm.json && npm run rename:esm",
+    "build": "npm run build:cjs && npm run build:esm",
+    "clean": "rimraf dist",
+    "rename:esm": "/bin/zsh ./scripts/fix-mjs.sh",
+    "prepack": "npm run clean && npm run build"
   },
   "keywords": [
     "median",
@@ -44,16 +48,17 @@
     "chai": "^5.1.1",
     "compute-median": "^2.0.0",
     "fast-median": "^1.1.0",
+    "faster-median": "^1.0.0",
     "median": "^0.0.2",
     "median-average": "^1.0.1",
     "median-quickselect": "^1.0.1",
     "ml-array-median": "^1.1.6",
     "mocha": "^10.7.3",
+    "rimraf": "^6.0.1",
     "stats-median": "^1.0.1",
-    "faster-median": "^1.0.0"
+    "typescript": "^5.5.4"
   },
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {}
+  }
 }

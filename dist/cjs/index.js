@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.findMedian = findMedian;
 function SELECT(X, L, R, K) {
     while (R > L) {
         if (R - L > 600) {
