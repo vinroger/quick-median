@@ -71,3 +71,8 @@ For more information about the algorithm, see the [Wikipedia article on the Floy
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+This project is created by Vincentius Roger Kuswara
+Contact me at: vincentiusrogerk@gmail.com
