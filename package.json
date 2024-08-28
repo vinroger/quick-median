@@ -1,6 +1,6 @@
 {
   "name": "quick-median",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Lightning-fast median finding with O(n) average time complexity using Floyd-Rivest algorithm",
   "main": "./dist/cjs/index.js",
   "types": "./dist/types/index.d.ts",
