@@ -1,4 +1,18 @@
-# Quick-Median
+# Quick-Median: Lightning-Fast Median Finding with O(n) Average Time Complexity
+
+🚀 Blazingly fast median computation using the Floyd-Rivest algorithm
+📊 Outperforms traditional quickselect in practice
+⚡ Average time complexity of O(n)
+🔧 TypeScript support included
+
+
+## Installation
+
+Install quick-median with npm:
+
+```bash
+npm install quick-median
+```
 
 ## Why this project?
 
@@ -35,6 +49,7 @@ The worst-case scenario for Floyd-Rivest (and Quickselect) occurs when the pivot
 
 
 ## Benchmarks
+See the benchmark at: https://vinroger.github.io/quick-median/
 
 This implementation consistently outperforms other popular median-finding packages on npm:
 

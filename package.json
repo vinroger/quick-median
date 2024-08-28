@@ -1,7 +1,7 @@
 {
   "name": "quick-median",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "Lightning-fast median finding with O(n) average time complexity using Floyd-Rivest algorithm",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,9 +12,24 @@
     "build": "tsc",
     "prepublishOnly": "npm run build && npm run minify"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "median",
+    "algorithm",
+    "floyd-rivest",
+    "statistics",
+    "performance",
+    "quickselect"
+  ],
+  "author": "Vincentius Roger Kuswara <vincentiusrogerk@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vinroger/quick-median.git"
+  },
+  "homepage": "https://github.com/vinroger/quick-median#readme",
+  "bugs": {
+    "url": "https://github.com/vinroger/quick-median/issues"
+  },
   "devDependencies": {
     "benchmark": "^2.1.4",
     "chai": "^5.1.1",
@@ -27,6 +42,9 @@
     "mocha": "^10.7.3",
     "stats-median": "^1.0.1",
     "faster-median": "^1.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {}
 }
