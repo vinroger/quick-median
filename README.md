@@ -71,6 +71,23 @@ As shown, Quick-Median is consistently faster, especially for larger datasets. F
 - 12x faster than 'compute-median'
 - 1.48x faster than 'ml-array-median'
 
+### Detailed Benchmark
+<img width="871" alt="image" src="https://github.com/user-attachments/assets/681e0305-ea73-483e-8209-2a1110fbd677">
+
+![image](https://github.com/user-attachments/assets/e77b3253-4725-4873-8458-4f27c62683ea)
+
+![image](https://github.com/user-attachments/assets/dbc8340f-8889-4a2b-93cf-abe5c18dc81b)
+
+![image](https://github.com/user-attachments/assets/d5ebcadb-b45c-490b-b542-4a57bb6afc8b)
+
+![image](https://github.com/user-attachments/assets/baf4d3b5-9ed6-4f9a-a305-10a33b929177)
+
+![image](https://github.com/user-attachments/assets/08db89b5-322a-4640-952e-3f9d567b1345)
+
+![image](https://github.com/user-attachments/assets/7c42aa0d-024b-4e6f-b8b6-87f47b9e183f)
+
+
+
 ## TypeScript Support
 
 This package is written in TypeScript and includes type definitions, ensuring type safety in TypeScript projects.
