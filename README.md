@@ -49,8 +49,7 @@ The worst-case scenario for Floyd-Rivest (and Quickselect) occurs when the pivot
 
 
 ## Benchmarks
-See the benchmark at: https://vinroger.github.io/quick-median/
-
+### Summary
 This implementation consistently outperforms other popular median-finding packages on npm:
 
 
@@ -71,7 +70,9 @@ As shown, Quick-Median is consistently faster, especially for larger datasets. F
 - 12x faster than 'compute-median'
 - 1.48x faster than 'ml-array-median'
 
-### Detailed Benchmark
+### Detailed Report
+See full benchmark at: https://vinroger.github.io/quick-median/
+
 <img width="871" alt="image" src="https://github.com/user-attachments/assets/681e0305-ea73-483e-8209-2a1110fbd677">
 
 ![image](https://github.com/user-attachments/assets/e77b3253-4725-4873-8458-4f27c62683ea)
